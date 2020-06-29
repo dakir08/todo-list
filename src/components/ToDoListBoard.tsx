@@ -16,6 +16,7 @@ import ContainerBoard from "./ContainerBoard";
 import { Store } from "../reducers";
 import { LocalUserInfo } from "../reducers/authentication";
 import { connect } from "react-redux";
+import { getGreetingSentence } from "./utils";
 
 export interface TodoListAppProps {
   userInfo: LocalUserInfo;
@@ -26,11 +27,9 @@ const TodoListApp: React.SFC<TodoListAppProps> = ({ userInfo }) => {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  console.log(userInfo);
   return (
     <ContainerBoard>
-      <h1>Good Evening, {userInfo.firstName}!</h1>
-      <h3>Time to get a bong now :D</h3>
+      <h1>{userInfo.firstName && getGreetingSentence(userInfo.firstName!)}</h1>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8} lg={8}>
           <Paper className={fixedHeightPaper}>

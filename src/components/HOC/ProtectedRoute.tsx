@@ -12,9 +12,7 @@ const ProtectedRoute: React.SFC<ProtectedRouteProps> = ({
   children,
   userInfo,
 }) => {
-  console.log(userInfo);
-  if (!userInfo?.emailAddress || !userInfo.uid)
-    return <Redirect to="/signin" />;
+  if (!userInfo.uid) return <Redirect to="/signin" />;
   return <>{children}</>;
 };
 

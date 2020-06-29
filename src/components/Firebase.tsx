@@ -65,7 +65,6 @@ const Firebase: React.SFC<FirebaseProps> = ({
     setupAuthentication();
     setupUserInfoListener();
 
-    console.log(userInfo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInitialize, userInfo.uid]);
   return null;
