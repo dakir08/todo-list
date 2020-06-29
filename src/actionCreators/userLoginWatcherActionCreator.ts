@@ -3,9 +3,9 @@ import { User } from "firebase";
 
 export default (user: User | null): Action => {
   if (!user)
-    return { type: AuthenticationActionTypes.USER_LOGIN_STATUS, payload: {} };
+    return { type: AuthenticationActionTypes.USER_LOGIN_WATCHER, payload: {} };
   return {
-    type: AuthenticationActionTypes.USER_LOGIN_STATUS,
+    type: AuthenticationActionTypes.USER_LOGIN_WATCHER,
     payload: {
       uid: user.uid,
       emailAddress: user.email!,

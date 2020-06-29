@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { ListReducer } from "../reducers/list";
 import fetchTasksActionCreator from "../actionCreators/fetchTasksActionCreator";
 import { User } from "firebase";
-import watchUserLoginStatusActionCreator from "../actionCreators/watchUserLoginStatusActionCreator";
+import userLoginWatcherActionCreator from "../actionCreators/userLoginWatcherActionCreator";
 import { Store } from "../reducers";
 import { LocalUserInfo } from "../reducers/authentication";
 
@@ -70,7 +70,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
       });
     },
     watchUserAuthenticateStatus: (user: User | null) =>
-      dispatch(watchUserLoginStatusActionCreator(user)),
+      dispatch(userLoginWatcherActionCreator(user)),
   };
 };
 

@@ -24,7 +24,7 @@ export enum AuthenticationActionTypes {
   USER_LOGIN = "User login action",
   USER_LOGIN_SUCCESS = "User login successfully",
   USER_LOGIN_FAIL = "User login fail, display error to user",
-  USER_LOGIN_STATUS = "The status of the logged user",
+  USER_LOGIN_WATCHER = "The status of the logged user",
   USER_LOGOUT = "User logout action",
 }
 
@@ -54,7 +54,7 @@ export type Action =
       payload: AuthenticationStatus;
     }
   | {
-      type: AuthenticationActionTypes.USER_LOGIN_STATUS;
+      type: AuthenticationActionTypes.USER_LOGIN_WATCHER;
       payload: LocalUserInfo;
     }
   | {
@@ -82,7 +82,7 @@ export default function reducer(
       return { ...state, authenticatorStatus: action.payload };
     case AuthenticationActionTypes.USER_LOGIN_FAIL:
       return { ...state, authenticatorStatus: action.payload };
-    case AuthenticationActionTypes.USER_LOGIN_STATUS:
+    case AuthenticationActionTypes.USER_LOGIN_WATCHER:
       return { ...state, localUserInfo: action.payload, userInitialize: true };
     case AuthenticationActionTypes.USER_LOGOUT:
       return {

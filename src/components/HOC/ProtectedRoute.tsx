@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { LocalUserInfo } from "../../reducers/authentication";
 
 export interface ProtectedRouteProps {
-  userInfo: LocalUserInfo | undefined;
+  userInfo: LocalUserInfo;
 }
 
 const ProtectedRoute: React.SFC<ProtectedRouteProps> = ({

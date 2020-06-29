@@ -1,4 +1,4 @@
-import { takeLatest, takeEvery, put, select, take } from "redux-saga/effects";
+import { takeLatest, takeEvery, put, take, select } from "redux-saga/effects";
 import { TodoActionTypes } from "../reducers/list";
 import { todosRef, userRef, auth } from "../services/firebase";
 import {
@@ -69,28 +69,38 @@ function* verifyUserFromFirebase(action: any) {
   }
 }
 
+const getUserUid = (state: Store) => state.user.localUserInfo.uid;
+
 export default function* businessLogicMW() {
-  const { payload } = yield take(AuthenticationActionTypes.USER_LOGIN_STATUS);
-  const userUniqueId = payload.uid;
+  yield takeEvery(TodoActionTypes.ADD_TASK, function* (action: any) {
+    const userUniqueId = yield select(getUserUid);
+    const currentUserTodos = yield todosRef.child(`${userUniqueId}`);
 
-  const currentUserTodos = todosRef.child(`${userUniqueId}`);
-
-  //Todo
-  yield takeEvery(TodoActionTypes.ADD_TASK, (action: any) => {
-    currentUserTodos.child(`${action.payload.id}`).set({ ...action.payload });
+    yield currentUserTodos
+      .child(`${action.payload.id}`)
+      .set({ ...action.payload });
   });
-  yield takeLatest(TodoActionTypes.COMPLETE_TASK, (action: any) => {
+  yield takeLatest(TodoActionTypes.COMPLETE_TASK, function* (action: any) {
     const { id, isComplete, updatedTime } = action.payload;
+
+    const userUniqueId = yield select(getUserUid);
+    const currentUserTodos = yield todosRef.child(`${userUniqueId}`);
 
     currentUserTodos.child(`${id}`).update({ isComplete, updatedTime });
   });
-  yield takeLatest(TodoActionTypes.UPDATE_TASK, (action: any) => {
+  yield takeLatest(TodoActionTypes.UPDATE_TASK, function* (action: any) {
     const { id, taskName, updatedTime } = action.payload;
+
+    const userUniqueId = yield select(getUserUid);
+    const currentUserTodos = yield todosRef.child(`${userUniqueId}`);
 
     currentUserTodos.child(`${id}`).update({ taskName, updatedTime });
   });
-  yield takeEvery(TodoActionTypes.DELETE_TASK, (action: any) => {
+  yield takeEvery(TodoActionTypes.DELETE_TASK, function* (action: any) {
     const id = action.payload;
+
+    const userUniqueId = yield select(getUserUid);
+    const currentUserTodos = yield todosRef.child(`${userUniqueId}`);
 
     currentUserTodos.child(`${id}`).remove();
   });
