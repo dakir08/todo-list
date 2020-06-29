@@ -1,4 +1,4 @@
-import { takeLatest, takeEvery, put, take, select } from "redux-saga/effects";
+import { takeLatest, takeEvery, put, select } from "redux-saga/effects";
 import { TodoActionTypes } from "../reducers/list";
 import { todosRef, userRef, auth } from "../services/firebase";
 import {
@@ -18,7 +18,7 @@ function* addNewUserToFirebase(action: any) {
 
     if (user) {
       userRef.child(`${user.uid}`).set({
-        id: user.uid,
+        uid: user.uid,
         emailAddress,
         firstName,
         lastName,

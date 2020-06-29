@@ -1,5 +1,5 @@
 import React, { Dispatch, useEffect } from "react";
-import { todosRef, auth } from "../services/firebase";
+import { todosRef, auth, userRef } from "../services/firebase";
 import { connect } from "react-redux";
 import { ListReducer } from "../reducers/list";
 import fetchTasksActionCreator from "../actionCreators/fetchTasksActionCreator";
@@ -7,12 +7,14 @@ import { User } from "firebase";
 import userLoginWatcherActionCreator from "../actionCreators/userLoginWatcherActionCreator";
 import { Store } from "../reducers";
 import { LocalUserInfo } from "../reducers/authentication";
+import fetchUserInfoActionCreator from "../actionCreators/fetchUserInfoActionCreator";
 
 export interface FirebaseProps {
   fetchTodos: (data: ListReducer[]) => void;
-  watchUserAuthenticateStatus: (user: User | null) => void;
+  watchUserAuthenticateStatus: (uid: string) => void;
   userInfo: LocalUserInfo;
   userInitialize: boolean;
+  fetchUserInfoAction: (user: LocalUserInfo) => void;
 }
 
 const Firebase: React.SFC<FirebaseProps> = ({
@@ -20,6 +22,7 @@ const Firebase: React.SFC<FirebaseProps> = ({
   watchUserAuthenticateStatus,
   userInfo,
   userInitialize,
+  fetchUserInfoAction,
 }) => {
   const setupTodoListener = () => {
     if (userInfo.uid) {
@@ -39,19 +42,30 @@ const Firebase: React.SFC<FirebaseProps> = ({
     }
   };
 
+  const setupUserInfoListener = () => {
+    if (userInfo.uid) {
+      userRef.child(userInfo.uid).once("value", (snapshot) => {
+        if (!snapshot.val) return;
+        fetchUserInfoAction(snapshot.val());
+      });
+    }
+  };
+
   const setupAuthentication = () => {
     auth.onAuthStateChanged((user: User | null) => {
       if (user) {
-        return watchUserAuthenticateStatus(user);
+        return watchUserAuthenticateStatus(user.uid);
       }
-      return watchUserAuthenticateStatus(null);
+      return watchUserAuthenticateStatus("");
     });
   };
 
   useEffect(() => {
     setupTodoListener();
     setupAuthentication();
+    setupUserInfoListener();
 
+    console.log(userInfo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInitialize, userInfo.uid]);
   return null;
@@ -69,8 +83,11 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
         dispatch(fetchTasksActionCreator(data));
       });
     },
-    watchUserAuthenticateStatus: (user: User | null) =>
-      dispatch(userLoginWatcherActionCreator(user)),
+    watchUserAuthenticateStatus: (uid: string) =>
+      dispatch(userLoginWatcherActionCreator(uid)),
+    fetchUserInfoAction: (user: LocalUserInfo) => {
+      dispatch(fetchUserInfoActionCreator(user));
+    },
   };
 };
 

@@ -13,16 +13,23 @@ import RenderTodoChart from "./StatisticChart";
 import Title from "./Title";
 import ProgressTask from "./ProgressTaskChart";
 import ContainerBoard from "./ContainerBoard";
+import { Store } from "../reducers";
+import { LocalUserInfo } from "../reducers/authentication";
+import { connect } from "react-redux";
 
-export interface TodoListAppProps {}
+export interface TodoListAppProps {
+  userInfo: LocalUserInfo;
+}
 
-const TodoListApp: React.SFC<TodoListAppProps> = () => {
+const TodoListApp: React.SFC<TodoListAppProps> = ({ userInfo }) => {
   const classes = useStyled();
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  console.log(userInfo);
   return (
     <ContainerBoard>
-      <h1>Good Evening, Max!</h1>
+      <h1>Good Evening, {userInfo.firstName}!</h1>
       <h3>Time to get a bong now :D</h3>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8} lg={8}>
@@ -49,4 +56,8 @@ const TodoListApp: React.SFC<TodoListAppProps> = () => {
   );
 };
 
-export default TodoListApp;
+const mapStateToProps = (state: Store) => ({
+  userInfo: state.user.localUserInfo,
+});
+
+export default connect(mapStateToProps)(TodoListApp);
