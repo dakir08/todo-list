@@ -15,6 +15,8 @@ export interface SideNavBarTopProps {
   user: LocalUserInfo;
 }
 
+console.log(Boolean(NaN));
+
 const SideNavBarTop: React.SFC<SideNavBarTopProps> = ({ user }) => {
   return user.uid ? (
     <List>
