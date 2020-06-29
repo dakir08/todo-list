@@ -31,9 +31,7 @@ const SideNavBarTop: React.SFC<SideNavBarTopProps> = ({ user }) => {
         <PersonalVideoIcon />
       </ListItemWithNavLink>
     </List>
-  ) : (
-    <>Please login to access me </>
-  );
+  ) : null;
 };
 
 const mapStateToProps = (state: Store) => ({

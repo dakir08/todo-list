@@ -6,6 +6,7 @@ import {
   ExitToApp as ExitToAppIcon,
   VpnKeyOutlined as VpnKeyOutlinedIcon,
   LockOutlined as LockOutlinedIcon,
+  Settings as SettingsIcon,
 } from "@material-ui/icons";
 
 import ListItemWithNavLink from "./ListItemWithNavLink";
@@ -31,9 +32,14 @@ const SideNavBarSetting: React.SFC<SideNavBarSettingProps> = ({ user }) => {
       )}
 
       {user.uid && (
-        <ListItemWithNavLink to="/signout" title="Logout">
-          <ExitToAppIcon />
-        </ListItemWithNavLink>
+        <>
+          <ListItemWithNavLink to="/setting" title="Account Setting">
+            <SettingsIcon />
+          </ListItemWithNavLink>
+          <ListItemWithNavLink to="/signout" title="Logout">
+            <ExitToAppIcon />
+          </ListItemWithNavLink>
+        </>
       )}
     </List>
   );
